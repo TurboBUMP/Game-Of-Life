@@ -1,6 +1,9 @@
 try:
     import pygame
     import pygame.locals
+    import tkinter as tk
+    from tkinter import ttk
+    import random as rand
 except ModuleNotFoundError as err:
     print('Error: ', err)
 
@@ -35,6 +38,21 @@ pygame.display.set_caption(TITLE)
 FramePerSec = pygame.time.Clock()
 FramePerSec.tick(FPS)
 
+##############################################################################
+print('Game of Life: select the probability with the slider and close the window')
+tk_window=tk.Tk()
+tk_window.title('Set Probability')
+P_LIMIT=tk.DoubleVar(value=0)
+scale=tk.Scale(tk_window, from_=0, to=1, resolution=+0.1, length=300, orient='vertical', variable=P_LIMIT)
+scale.pack()
+progress=ttk.Progressbar(tk_window, variable=P_LIMIT, maximum=1)
+progress.pack()
+tk_window.mainloop()
+PROBABILITY_LIMIT=P_LIMIT.get()
+print(f'   probability set to --> {P_LIMIT.get()}') 
+ 
+##############################################################################
+
 ###############################################################################
 
 def draw_grid(display,display_width,x_cell_dimension,y_cell_dimension,display_height,color):
@@ -46,7 +64,6 @@ def draw_grid(display,display_width,x_cell_dimension,y_cell_dimension,display_he
         pygame.draw.line(display,color,(0,y),(display_width,y))
 
 ###############################################################################
-
 ###############################################################################
 ################################## class ######################################
 class button_glider():
@@ -271,11 +288,13 @@ class cells_set():
                 c.increment_number_of_neighbors(1)
 
             if(c.get_numbers_of_neighbors()<2):
-                self.set_of_cells_to_delete_at_next_era.add(c)
+                if rand.uniform(0,1)>=PROBABILITY_LIMIT:
+                    self.set_of_cells_to_delete_at_next_era.add(c)
             if(c.get_numbers_of_neighbors()==2 or c.get_numbers_of_neighbors() ==3):
                 pass
             if(c.get_numbers_of_neighbors()>=4):
-                self.set_of_cells_to_delete_at_next_era.add(c)
+                if rand.uniform(0,1)>=PROBABILITY_LIMIT:
+                    self.set_of_cells_to_delete_at_next_era.add(c)
 
     def find_dead_cells(self):
         for c in self.get_living_cells():
@@ -309,7 +328,8 @@ class cells_set():
 
             if c.get_numbers_of_neighbors() == 3:
                 c.reset_number_of_neighbors()
-                self.set_of_cells_to_add_at_next_era.add(c)
+                if rand.uniform(0,1)>=PROBABILITY_LIMIT:
+                    self.set_of_cells_to_add_at_next_era.add(c)
 
     def update_cells(self):
         for c in self.get_set_of_cells_to_delete_at_next_era():
@@ -347,8 +367,8 @@ if __name__ == '__main__':
     button_spaceship = button_spaceship(button_spaceship_surface,(1036,400))       
 
     # SETUP of the game initial state -----------------------------------------
-    draw_grid(DISPLAY,BOARD_WIDTH,X_CELL_DIMENSION,Y_CELL_DIMENSION,BOARD_HEIGHT,GREY)
     print('Game Of Life: select your cells and press any key to start the game!')
+    draw_grid(DISPLAY,BOARD_WIDTH,X_CELL_DIMENSION,Y_CELL_DIMENSION,BOARD_HEIGHT,GREY)
     while set_flag:
         for event in pygame.event.get():
             if event.type == pygame.locals.QUIT:
