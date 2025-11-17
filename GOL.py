@@ -334,15 +334,15 @@ if __name__ == '__main__':
     cells_set = cells_set()
     set_flag = True
 
-    button_glider_surface = pygame.image.load('glider.png')
+    button_glider_surface = pygame.image.load('images/glider.png')
     button_glider_surface = pygame.transform.scale(button_glider_surface,(150,150))
     button_glider = button_glider(button_glider_surface,(1036,100))
 
-    button_rumble_surface = pygame.image.load('rumble.png')                         
+    button_rumble_surface = pygame.image.load('images/rumble.png')                         
     button_rumble_surface = pygame.transform.scale(button_rumble_surface,(200,80)) 
     button_rumble = button_rumble(button_rumble_surface,(1036,250))      
 
-    button_spaceship_surface = pygame.image.load('spaceship.png')                          
+    button_spaceship_surface = pygame.image.load('images/spaceship.png')                          
     button_spaceship_surface = pygame.transform.scale(button_spaceship_surface,(150,150))   
     button_spaceship = button_spaceship(button_spaceship_surface,(1036,400))       
 
@@ -386,7 +386,7 @@ if __name__ == '__main__':
                 pygame.quit()
                 sys.exit()
 
-        if (counter == 100):
+        if (counter == 10):
             counter = 0
             era += 1
             DISPLAY.fill(WHITE)
